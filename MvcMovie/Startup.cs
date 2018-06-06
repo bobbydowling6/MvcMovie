@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using MvcMovie.Models;
 
+
 namespace MvcMovie
 {
     public class Startup
@@ -19,10 +20,17 @@ namespace MvcMovie
         }
 
         public IConfiguration Configuration { get; }
+        public object CheckConsentNeeded { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                //options.CheckConsentNeeded = Context => true;
+                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+            });
+
             services.AddMvc();
 
             services.AddDbContext<MvcMovieContext>(options =>
